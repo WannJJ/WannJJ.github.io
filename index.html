@@ -1,0 +1,868 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>2048 Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      background: linear-gradient(280deg, hsl(210, 70%, 80%), #eeffee);
+      /* Disable pull-to-refresh */
+      overscroll-behavior: contain;
+    }
+
+    div {
+      /* border: 1px solid black; */
+      width: 90px;
+      height: 90px;
+      position: absolute;
+
+      font: bold 50px Times New Roman;
+      text-align: center;
+      line-height: 70px;
+
+      border-radius: 7%;
+    }
+
+    .board {
+      background: rgb(150, 150, 150);
+      width: 435px;
+      height: 435px;
+
+      position: absolute;
+      left: 30%;
+      /* top: 20%; */
+
+      border-radius: 3%;
+
+      font: 20px Times New Roman;
+
+    }
+
+    .empty1,
+    .cell1 {
+      left: 15px;
+      top: 15px;
+      /* animation: moveRight 1s linear; */
+    }
+
+
+    .empty2,
+    .cell2 {
+      left: 120px;
+      top: 15px;
+    }
+
+    .empty3,
+    .cell3 {
+      left: 225px;
+      top: 15px;
+    }
+
+    .empty4,
+    .cell4 {
+      left: 330px;
+      top: 15px;
+
+      /* animation: moveRight 0.75s linear; */
+    }
+
+    .empty5,
+    .cell5 {
+      left: 15px;
+      top: 120px;
+
+
+    }
+
+    .empty6,
+    .cell6 {
+      left: 120px;
+      top: 120px;
+
+
+    }
+
+    .empty7,
+    .cell7 {
+      left: 225px;
+      top: 120px;
+    }
+
+    .empty8,
+    .cell8 {
+      left: 330px;
+      top: 120px;
+
+    }
+
+    .empty9,
+    .cell9 {
+      left: 15px;
+      top: 225px;
+
+      /* animation: moveRight4 0.75s linear; */
+    }
+
+    .empty10,
+    .cell10 {
+      left: 120px;
+      top: 225px;
+    }
+
+    .empty11,
+    .cell11 {
+      left: 225px;
+      top: 225px;
+    }
+
+    .empty12,
+    .cell12 {
+      left: 330px;
+      top: 225px;
+    }
+
+    .empty13,
+    .cell13 {
+      left: 15px;
+      top: 330px;
+
+      /* animation: moveDown1 0.75s linear; */
+    }
+
+    .empty14,
+    .cell14 {
+      left: 120px;
+      top: 330px;
+    }
+
+    .empty15,
+    .cell15 {
+      left: 225px;
+      top: 330px;
+    }
+
+    .empty16,
+    .cell16 {
+      left: 330px;
+      top: 330px;
+    }
+
+    @keyframes moveRight {
+      0% {
+        left: 15px;
+      }
+
+
+      100% {
+        /* top: 30%; */
+        /* left: 330px; */
+      }
+
+    }
+
+    @keyframes moveRight1 {
+      100% {
+        left: 15px;
+      }
+    }
+
+    @keyframes moveRight2 {
+      100% {
+        left: 120px;
+      }
+    }
+
+    @keyframes moveRight3 {
+      100% {
+        left: 225px;
+      }
+    }
+
+    @keyframes moveRight4 {
+      100% {
+        left: 330px;
+      }
+    }
+
+
+
+    @keyframes moveDown1 {
+      100% {
+        top: 15px;
+      }
+    }
+
+    @keyframes moveDown2 {
+      100% {
+        top: 120px;
+      }
+    }
+
+    @keyframes moveDown3 {
+      100% {
+        top: 225px;
+      }
+    }
+
+    @keyframes moveDown4 {
+      100% {
+        top: 330px;
+      }
+    }
+
+    @keyframes appear {
+      0% {
+        margin-left: 40px;
+        margin-top: 40px;
+        width: 15px;
+        height: 15px;
+      }
+    }
+
+
+    .empty {
+      background: #cdc1b4;
+      /* z-index: -1; */
+    }
+
+    button {
+      border: 0px;
+      border-radius: 7%;
+    }
+
+    #button {
+      background: #d2b48c;
+      padding: 10px 15px 15px 10px;
+      font: bold 23px Times New Roman;
+      color: white;
+      display: block;
+      width: 150px;
+
+      /* margin: auto; */
+      position: relative;
+      left: 5%;
+      top: 100%;
+    }
+
+    #Score {
+      background: #aaaabb;
+      width: 140px;
+      height: 70px;
+      position: relative;
+      left: 65%;
+      top: 110%;
+      /* margin-: px; */
+      font: 30px Times New Roman;
+      color: #dddddd;
+    }
+
+    #Best {
+      background: #aaaabb;
+      width: 140px;
+      height: 70px;
+      position: relative;
+      left: 65%;
+      top: 110%;
+      margin-top: 10px;
+      font: 30px Times New Roman;
+      color: #dddddd;
+    }
+
+    #name {
+      font: bold 100px Times New Roman;
+      color: #696980;
+      position: relative;
+      /* left: 65%; */
+      top: 60%;
+    }
+
+    #End {
+      background: rgba(200, 200, 200, 0.8);
+      width: 100%;
+      height: 100%;
+
+      position: absolute;
+      top: 0%;
+
+      border-radius: 3%;
+      color: #606060;
+      font: bold 60px Times New Roman;
+      text-align: center;
+      line-height: 400px;
+      /* padding-top: 50px; */
+      z-index: 99;
+      display: none;
+    }
+
+    #button2 {
+      background: #808080;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 100px;
+      margin-left: -50px;
+      margin-top: 40px;
+      font: 20px Times New Roman;
+      color: white
+        /* margin-top: 50%; */
+    }
+  </style>
+
+
+</head>
+
+<body>
+  <div class='board'>
+
+    <div class='cell1'></div>
+    <div class='cell2'></div>
+    <div class='cell3'></div>
+    <div class='cell4'></div>
+    <div class='cell5'></div>
+    <div class='cell6'></div>
+    <div class='cell7'></div>
+    <div class='cell8'></div>
+    <div class='cell9'></div>
+    <div class='cell10'></div>
+    <div class='cell11'></div>
+    <div class='cell12'></div>
+    <div class='cell13'></div>
+    <div class='cell14'></div>
+    <div class='cell15'></div>
+    <div class='cell16'></div>
+
+    <div class="empty empty1"></div>
+    <div class="empty empty2"></div>
+    <div class="empty empty3"></div>
+    <div class="empty empty4"></div>
+    <div class="empty empty5"></div>
+    <div class="empty empty6"></div>
+    <div class="empty empty7"></div>
+    <div class="empty empty8"></div>
+    <div class="empty empty9"></div>
+    <div class="empty empty10"></div>
+    <div class="empty empty11"></div>
+    <div class="empty empty12"></div>
+    <div class="empty empty13"></div>
+    <div class="empty empty14"></div>
+    <div class="empty empty15"></div>
+    <div class="empty empty16"></div>
+
+    <div id="Score">Score<br></div>
+    <div id="Best">Best<br></div>
+
+    <button id="button" onclick="startGame()">New Game</button>
+    <div id="name">2048</div>
+
+    <div id="End">Game over!
+      <button id="button2" onclick="startGame()">Try again</button>
+    </div>
+  </div>
+
+
+  <script>
+    score = 0;
+    // Use cookie to store bestScore. BestScore will not be lost when refreshing page
+    // Cannot set cookie by Chrome without http server
+    if (document.cookie == "") {
+      bestScore = 0;
+    } else {
+      arr = document.cookie.split("=");
+      bestScore = parseInt(arr[1]);
+    }
+
+    side = 4;
+    board = new Array(4).fill(0).map(() => new Array(4).fill(0));
+    colors = ['#cdc1b4', '#eee4da', '#ede0c8', '#f2b179', '#f59563', '#f67c5f', '#f65e3b', '#edcf72', '#edcc61', '#edc850', '#edc53f', '#edc22e'];
+    t = 0.1;
+
+    cell1 = document.getElementsByClassName("cell1")[0];
+    cell2 = document.getElementsByClassName("cell2")[0];
+    cell3 = document.getElementsByClassName("cell3")[0];
+    cell4 = document.getElementsByClassName("cell4")[0];
+    cell5 = document.getElementsByClassName("cell5")[0];
+    cell6 = document.getElementsByClassName("cell6")[0];
+    cell7 = document.getElementsByClassName("cell7")[0];
+    cell8 = document.getElementsByClassName("cell8")[0];
+    cell9 = document.getElementsByClassName("cell9")[0];
+    cell10 = document.getElementsByClassName("cell10")[0];
+    cell11 = document.getElementsByClassName("cell11")[0];
+    cell12 = document.getElementsByClassName("cell12")[0];
+    cell13 = document.getElementsByClassName("cell13")[0];
+    cell14 = document.getElementsByClassName("cell14")[0];
+    cell15 = document.getElementsByClassName("cell15")[0];
+    cell16 = document.getElementsByClassName("cell16")[0];
+
+    cellBoard = [
+      [cell1, cell2, cell3, cell4],
+      [cell5, cell6, cell7, cell8],
+      [cell9, cell10, cell11, cell12],
+      [cell13, cell14, cell15, cell16],
+    ];
+
+
+
+    displayScore = document.getElementById("Score");
+    displayBestScore = document.getElementById("Best");
+
+
+    /*
+    Add new cell, update score, check if game is over
+     */
+    function draw() {
+      for (let i = 0; i < side; i++) {
+        for (let j = 0; j < side; j++) {
+          if (board[i][j] == 0) {
+            cellBoard[i][j].innerHTML = "";
+            cellBoard[i][j].style.zIndex = 0;
+          } else {
+            cellBoard[i][j].innerHTML = "" + board[i][j];
+            cellBoard[i][j].style.zIndex = 10;
+
+          }
+
+          cellBoard[i][j].style.background = getColor(board[i][j]);
+          if (board[i][j] >= 8) {
+            cellBoard[i][j].style.color = 'white';
+          } else {
+            cellBoard[i][j].style.color = 'black';
+          }
+
+          //adapt font-size
+          if (board[i][j] >= 1024) {
+            cellBoard[i][j].style.fontSize = '40px';
+          } else {
+            cellBoard[i][j].style.fontSize = '50px';
+          }
+
+        }
+      }
+    }
+
+
+    //Add cookies
+    function writeCookies() {
+      // let expires = new Date();
+      // expires.setSeconds(expires.getSeconds() + maxAge);
+
+
+      let cookie = "bestScore=" + bestScore + ";";
+      // cookie += "Expires=" + expires.toUTCString() + ";";
+      // cookie += "Path=/;";
+      document.cookie = cookie;
+      console.log("cookie:" + document.cookie);
+    }
+
+    function readCookies() {
+      // var allCookies = documment.cookie;
+      arr = document.cookie.split("=");
+      console.log("best: " + arr[1]);
+
+    }
+
+
+    function updateGame() {
+
+      emptyCells = [];
+      for (let i = 0; i < side; i++) {
+        for (let j = 0; j < side; j++) {
+          if (board[i][j] == 0) {
+            emptyCells.push([i, j]);
+          }
+        }
+      }
+      //Select random cell to add new number
+      if (emptyCells.length > 0) {
+        chosen = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+        //New number is either 2 (with chance 75%) or 4 (25%)
+        newNumber = (1 + Math.round(Math.random() - 0.25)) * 2;
+        board[chosen[0]][chosen[1]] = newNumber;
+        cellBoard[chosen[0]][chosen[1]].style.animation = "appear " + (t / 2) + "s linear";
+      }
+
+
+
+      if (bestScore < score) {
+        bestScore = score;
+        writeCookies();
+      }
+
+      displayScore.innerHTML = "Score<br>" + score;
+      displayBestScore.innerHTML = "Best<br>" + bestScore;
+
+
+
+
+      draw();
+
+      // End game
+      if (emptyCells.length <= 1 && !checkGame()) {
+        document.getElementById("End").style.display = "block";
+      }
+
+    }
+
+
+    function left() {
+      change = false;
+      for (let i = 0; i < side; i++) {
+        idx_last = -1;
+        last_number = -1;
+
+        for (let j = 0; j < side; j++) {
+          if (board[i][j] == last_number) {
+            //move cell j to idx_last and merge
+            board[i][j] = 0;
+            last_number *= 2;
+            board[i][idx_last] = last_number;
+            score += last_number;
+
+            cellBoard[i][j].style.animation = "moveRight" + (idx_last + 1) + " " + t + "s linear";
+            setTimeout(() => {
+              cellBoard[i][j].style.animation = "";
+            }, t * 1000);
+
+            last_number = -1;
+            change = true;
+          } else if (board[i][j] != 0 && board[i][idx_last + 1] == 0) {
+            //move cell j to idx_last+1
+            board[i][idx_last + 1] = board[i][j];
+            last_number = board[i][j];
+
+            cellBoard[i][j].style.animation = "moveRight" + (idx_last + 2) + " " + t + "s linear";
+            setTimeout(() => {
+              cellBoard[i][j].style.animation = "";
+            }, t * 1000);
+
+            idx_last = idx_last + 1;
+            board[i][j] = 0;
+            change = true;
+          }
+          if (board[i][j] != 0) {
+            idx_last = j;
+            last_number = board[i][j];
+          }
+        }
+
+      }
+      if (change) {
+        setTimeout(() => {
+          updateGame();
+        }, t * 1000);
+      }
+    }
+
+    function right() {
+      change = false;
+      for (let i = 0; i < side; i++) {
+        idx_last = side;
+        last_number = -1;
+
+        for (let j = side - 1; j >= 0; j--) {
+          if (board[i][j] == last_number) {
+            board[i][j] = 0;
+            last_number *= 2;
+            board[i][idx_last] = last_number;
+            score += last_number;
+
+            cellBoard[i][j].style.animation = "moveRight" + (idx_last + 1) + " " + t + "s linear";
+            setTimeout(() => {
+              cellBoard[i][j].style.animation = "";
+            }, t * 1000);
+
+            last_number = -1;
+            change = true;
+          } else if (board[i][j] != 0 && board[i][idx_last - 1] == 0) {
+            board[i][idx_last - 1] = board[i][j];
+            last_number = board[i][j];
+
+            cellBoard[i][j].style.animation = "moveRight" + (idx_last) + " " + t + "s linear";
+            setTimeout(() => {
+              cellBoard[i][j].style.animation = "";
+            }, t * 1000);
+
+            idx_last = idx_last - 1;
+            board[i][j] = 0;
+            change = true;
+          }
+          if (board[i][j] != 0) {
+            idx_last = j;
+            last_number = board[i][j];
+          }
+        }
+
+      }
+      if (change) {
+        setTimeout(() => {
+          updateGame();
+        }, t * 1000);
+      }
+    }
+
+    function down() {
+      change = false;
+      for (let j = 0; j < side; j++) {
+        idx_last = side;
+        last_number = -1;
+
+        for (let i = side - 1; i >= 0; i--) {
+          if (board[i][j] == last_number) {
+            board[i][j] = 0;
+            last_number *= 2;
+            board[idx_last][j] = last_number;
+            score += last_number;
+
+            cellBoard[i][j].style.animation = "moveDown" + (idx_last + 1) + " " + t + "s linear";
+            setTimeout(() => {
+              cellBoard[i][j].style.animation = "";
+            }, t * 1000);
+
+            last_number = -1;
+            change = true;
+          } else if (board[i][j] != 0 && board[idx_last - 1][j] == 0) {
+            board[idx_last - 1][j] = board[i][j];
+            last_number = board[i][j];
+
+            cellBoard[i][j].style.animation = "moveDown" + (idx_last) + " " + t + "s linear";
+            setTimeout(() => {
+              cellBoard[i][j].style.animation = "";
+            }, t * 1000);
+
+            idx_last = idx_last - 1;
+            board[i][j] = 0;
+            change = true;
+          }
+          if (board[i][j] != 0) {
+            idx_last = i;
+            last_number = board[i][j];
+          }
+        }
+
+      }
+      if (change) {
+        setTimeout(() => {
+          updateGame();
+        }, t * 1000);
+      }
+    }
+
+    function up() {
+      change = false;
+      for (let j = 0; j < side; j++) {
+        idx_last = -1;
+        last_number = -1;
+
+        for (let i = 0; i < side; i++) {
+          if (board[i][j] == last_number) {
+            board[i][j] = 0;
+            last_number *= 2;
+            board[idx_last][j] = last_number;
+            score += last_number;
+
+            cellBoard[i][j].style.animation = "moveDown" + (idx_last + 1) + " " + t + "s linear";
+            setTimeout(() => {
+              cellBoard[i][j].style.animation = "";
+            }, t * 1000);
+
+            last_number = -1;
+            change = true;
+          } else if (board[i][j] != 0 && board[idx_last + 1][j] == 0) {
+            board[idx_last + 1][j] = board[i][j];
+            last_number = board[i][j];
+
+            cellBoard[i][j].style.animation = "moveDown" + (idx_last + 2) + " " + t + "s linear";
+            setTimeout(() => {
+              cellBoard[i][j].style.animation = "";
+            }, t * 1000);
+
+            idx_last = idx_last + 1;
+            board[i][j] = 0;
+            change = true;
+          }
+          if (board[i][j] != 0) {
+            idx_last = i;
+            last_number = board[i][j];
+          }
+        }
+
+      }
+      if (change) {
+        setTimeout(() => {
+          updateGame();
+        }, t * 1000);
+      }
+
+    }
+
+    function getColor(number) {
+      cell_level = Math.log2(number);
+      switch (cell_level) {
+        case -Infinity:
+          return colors[0];
+          break;
+        case 1:
+        case 2:
+        case 3:
+          return colors[cell_level];
+          break;
+        case 4:
+        case 5:
+        case 6:
+          return colors[cell_level];
+          break;
+        case 7:
+        case 8:
+        case 9:
+          return colors[cell_level];
+          break;
+        case 10:
+          return colors[cell_level];
+          break;
+        default:
+          return colors[11];
+      }
+    }
+
+    function checkGame() {
+      for (let i = 0; i < side; i++) {
+        for (let j = 0; j < side; j++) {
+          if (board[i][j] == 0) {
+            return true;
+          }
+          if (i + 1 < side && board[i][j] == board[i + 1][j] ||
+            j + 1 < side && board[i][j] == board[i][j + 1]) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+
+    function startGame() {
+      score = 0;
+      board = new Array(4).fill(0).map(() => new Array(4).fill(0));
+      document.getElementById("End").style.display = "none";
+
+      updateGame();
+
+
+    }
+
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+      startGame();
+
+    });
+    window.addEventListener('keydown', (e) => {
+      //Disable arrow keys scrolling in browser
+      if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+      }
+      switch (e.keyCode) {
+        case 37:
+          left();
+          break;
+        case 38:
+          up();
+          break;
+        case 39:
+          right();
+          break;
+        case 40:
+          down();
+          break;
+      }
+
+    });
+
+    //Touch events handling
+    //TODO: prevent refreshing document while swiping down
+    var xDown = null;
+    var yDown = null;
+
+    function getTouches(evt) {
+      return evt.touches || evtevt.originalEvent.touches;
+    };
+
+    function handleTouchStart(evt) {
+      const firstTouch = getTouches(evt)[0];
+      xDown = firstTouch.clientX;
+      yDown = firstTouch.clientY;
+
+    };
+
+    function handleTouchMove(evt) {
+      if (!xDown || !yDown) {
+        return;
+      }
+      var xUp = evt.touches[0].clientX;
+      var yUp = evt.touches[0].clientY;
+
+      var xDiff = xDown - xUp;
+      var yDiff = yDown - yUp;
+
+      if (Math.abs(xDiff) > Math.abs(yDiff)) {
+        if (xDiff >= 50) { //swipe left
+          left();
+        } else if (xDiff <= -50) {
+          right();
+        }
+      } else {
+        if (yDiff >= 50) { //swipe up
+          up();
+        } else if (yDiff <= -50) {
+          down();
+        }
+      }
+    };
+
+
+    document.addEventListener('touchstart', handleTouchStart, false);
+    document.addEventListener('touchmove', handleTouchMove, false);
+
+    //Mouse handling for non touch devices
+    var mousedown = false;
+    var xMDown = null;
+    var yMDown = null;
+    window.addEventListener("mousedown", function(e) {
+      mousedown = true;
+      xMDown = e.pageX;
+      yMDown = e.pageY;
+    });
+
+    window.addEventListener("mouseup", function(e) {
+      if (!xMDown || !yMDown) {
+        return;
+      }
+      var xMUp = e.pageX;
+      var yMUp = e.pageY;
+
+      var xDiff = xMDown - xMUp;
+      var yDiff = yMDown - yMUp;
+
+      if (Math.abs(xDiff) > Math.abs(yDiff)) {
+        if (xDiff >= 50) { //swipe left
+          left();
+        } else if (xDiff <= -50) {
+          right();
+        }
+      } else {
+        if (yDiff >= 50) { //swipe up
+          up();
+        } else if (yDiff <= -50) {
+          down();
+        }
+      }
+      mousedown = false;
+    });
+  </script>
+
+
+</body>
+
+</html>
