@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html>
 
@@ -419,8 +420,6 @@
     colors = ['#cdc1b4', '#eee4da', '#ede0c8', '#f2b179', '#f59563', '#f67c5f', '#f65e3b', '#edcf72', '#edcc61', '#edc850', '#edc53f', '#edc22e'];
     t = 0.1;
     undoBoard = new Array(4).fill(0).map(() => new Array(4).fill(0));
-    undo = false;
-    undo_count = 0;
 
     cell1 = document.getElementsByClassName(" cell1")[0];
     cell2 = document.getElementsByClassName("cell2")[0];
@@ -476,11 +475,7 @@
 
         }
       }
-      if (undo) {
-        document.getElementById('undoButton').style.opacity = "1";
-      } else {
-        document.getElementById('undoButton').style.opacity = "0.5";
-      }
+
     }
 
     //Add cookies
@@ -531,10 +526,6 @@
       displayScore.innerHTML = "Score<br>" + score;
       displayBestScore.innerHTML = "Best<br>" + bestScore;
 
-      undo_count += 1;
-      if (undo_count >= 5) {
-        undo = true;
-      }
 
       draw();
       // End game
@@ -805,9 +796,10 @@
     }
 
     function backup() {
-      for (i = 0; i < side; i++) {
-        for (j = 0; j < side; j++) {
-          undoBoard[i][j] = board[i][j];
+		undoScore = score;
+		for (i = 0; i < side; i++) {
+			for (j = 0; j < side; j++) {
+				undoBoard[i][j] = board[i][j];
         }
       }
 
@@ -816,17 +808,15 @@
     }
 
     function undoGame() {
-      if (undo && undo_count >= 5) {
-        undo = false;
-        undo_count = 0;
-        for (i = 0; i < side; i++) {
-          for (j = 0; j < side; j++) {
-            board[i][j] = undoBoard[i][j];
-          }
-        }
-        document.getElementById("End").style.display = "none";
-        draw();
-      }
+		for (i = 0; i < side; i++) {
+		  for (j = 0; j < side; j++) {
+			board[i][j] = undoBoard[i][j];
+		  }
+		}
+		score = undoScore;
+		document.getElementById("End").style.display = "none";
+		draw();
+      
     }
 
     function checkGame() {
@@ -848,8 +838,7 @@
       score = 0;
       board = new Array(4).fill(0).map(() => new Array(4).fill(0));
       undoBoard = new Array(4).fill(0).map(() => new Array(4).fill(0));
-      undo = false;
-      undo_count = 0;
+	  undoScore = 0;
       document.getElementById("End").style.display = "none";
 
       updateGame();
